@@ -12,6 +12,7 @@ type Position = {
 
 const Positions: React.FC = () => {
     const [positions, setPositions] = useState<Position[]>([]);
+    const [searchTerm, setSearchTerm] = useState('');
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -51,7 +52,12 @@ const Positions: React.FC = () => {
             <h2 className="text-center mb-4">Posiciones</h2>
             <Row className="mb-4">
                 <Col md={3}>
-                    <Form.Control type="text" placeholder="Buscar por título" />
+                    <Form.Control
+                        type="text"
+                        placeholder="Buscar por título"
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                    />
                 </Col>
                 <Col md={3}>
                     <Form.Control type="date" placeholder="Buscar por fecha" />
@@ -75,7 +81,11 @@ const Positions: React.FC = () => {
                 </Col>
             </Row>
             <Row>
-                {positions.map((position, index) => (
+                {positions
+                    .filter((position) =>
+                        position.title.toLowerCase().includes(searchTerm.toLowerCase())
+                    )
+                    .map((position, index) => (
                     <Col md={4} key={index} className="mb-4">
                         <Card className="shadow-sm">
                             <Card.Body>
